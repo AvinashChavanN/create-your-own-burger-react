@@ -19,7 +19,8 @@ class BurgerBuilder extends Component {
             meat:0
         },
         totalPrice:4,
-        perchasable:true
+        perchasable:true,
+        purchasing:false
     }
 
     addIngredient = (type) =>{
@@ -56,6 +57,17 @@ class BurgerBuilder extends Component {
         },0)
         this.setState({perchasable:sum<=0})
     }
+
+    updatePurchasing=()=>{
+        this.setState({purchasing:true});
+    }
+
+    handleCancelOrder = () =>{
+        this.setState({purchasing:false});
+    }
+    handleContinueOrder = () =>{
+        alert('Continue clicked');
+    }
     render(){
         const disableInfo = {
             ...this.state.ingredients
@@ -68,8 +80,8 @@ class BurgerBuilder extends Component {
         return(
             <Auxiliaty>
                 <Burger ingredients={this.state.ingredients}/>
-                <Modal>
-                    <OrderSummary ingredients={this.state.ingredients}/>
+                <Modal show={this.state.purchasing} cancelOrder={this.handleCancelOrder}>
+                    <OrderSummary ingredients={this.state.ingredients} total={this.state.totalPrice} cancelOrder = {this.handleCancelOrder} continueOrder={this.handleContinueOrder}/>
                 </Modal>
                 <BuildControls
                     added={this.addIngredient}
@@ -77,6 +89,7 @@ class BurgerBuilder extends Component {
                     price={this.state.totalPrice}
                     disabled={disableInfo}
                     perchasable={this.state.perchasable}
+                    ordering={this.updatePurchasing}
                 />
             </Auxiliaty>
         );
